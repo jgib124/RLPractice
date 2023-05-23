@@ -23,7 +23,7 @@ state_space_size = env.observation_space.n
 q_table = np.zeros((state_space_size, action_space_size))
 
 # Print the Q-table to terminal
-print(q_table)
+# print(q_table)
 
 # ---HYPERPARAMETERS---
 # Number of episodes = number of times we run the environment from the beginning
@@ -55,10 +55,9 @@ rewards_all_episodes = []
 # Q-learning algorithm
 # Each loop iteration runs a new episode
 for episode in range(num_episodes):
-    state, _ = env.reset()  # reset the environment to start a new episode
+    state = env.reset()  # reset the environment to start a new episode
 
-    terminated = False  # boolean to track if the episode is finished
-    truncated = False  # boolean to track if the episode is finished
+    done = False # variable to track whether the episode is done
     rewards_current_episode = 0  # variable to track the total reward within the current episode
 
     # Each loop iteration runs a new step within the episode
@@ -77,9 +76,11 @@ for episode in range(num_episodes):
 
         # Using the action, generate the next state, reward, whether the episode is done,
         # and additional info from the environment
-        # NOTE: terminated is if the episode is done
-        # NOTE: truncated is if the episode is stopped from a non-MDP reason
-        new_state, reward, terminated, truncated , info = env.step(action)
+        # NOTE: terminated and truncated are not used in this environment
+        # stable_baseline3 returns "done" as terminal signal
+        # print(env.step(action))
+        new_state, reward, done, info = env.step(action)
+
 
         # Update Q-table for Q(s, a)
         # NOTE: max[Q(s', a')] is the maximum possible Q-value for all actions from the new state
@@ -93,7 +94,7 @@ for episode in range(num_episodes):
         rewards_current_episode += reward
 
         # Check if the episode is done
-        if terminated == True or truncated == True:
+        if done:
             break
 
     # Loop: STEPS
@@ -117,10 +118,41 @@ for r in rewards_per_thousand_episodes:
     print(count, ": ", str(sum(r/1000)))
     count += 1000
 
-# Print updated Q-table
-print("\n\nQ-table:\n")
-print(q_table)
+# # Print updated Q-table
+# print("\n\nQ-table:\n")
+# print(q_table)
 
+
+# ---WATCH AGENT PLAY FROZEN LAKE---
+for episode in range(3):
+    state = env.reset()
+    done = False
+    print("EPISODE ", episode + 1, "\n\n\n\n")
+    time.sleep(1)
+
+    for step in range(max_steps_per_episode):
+        # Render state of environment to display
+        env.render()
+        time.sleep(0.3)
+
+        # Choose action with highest Q-value for current state
+        action = np.argmax(q_table[state, :])
+        new_state, reward, done, info = env.step(action)
+
+        if done:
+            env.render()
+            if reward == 1:
+                print("Reached Goal!!!")
+                time.sleep(3)
+            else:
+                print("Fell through hole!!!")
+                time.sleep(3)
+
+            break
+
+        state = new_state
+
+env.close()
 
 
 
