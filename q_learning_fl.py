@@ -10,6 +10,7 @@ import numpy as np
 import gym
 import random
 import time
+import os
 
 # Create the environment from the gym library
 env = gym.make("FrozenLake-v1")
@@ -124,7 +125,10 @@ for r in rewards_per_thousand_episodes:
 
 
 # ---WATCH AGENT PLAY FROZEN LAKE---
-for episode in range(3):
+num_episodes = 10
+results = []
+
+for episode in range(num_episodes):
     state = env.reset()
     done = False
     print("EPISODE ", episode + 1, "\n\n\n\n")
@@ -132,8 +136,10 @@ for episode in range(3):
 
     for step in range(max_steps_per_episode):
         # Render state of environment to display
+        os.system('cls') # Clears terminal so that grid is positioned in same starting spot
         env.render()
-        time.sleep(0.3)
+        print("State: ", new_state, "Action: ", action, "Reward: ", reward)
+        time.sleep(0.3) # Pause to see render
 
         # Choose action with highest Q-value for current state
         action = np.argmax(q_table[state, :])
@@ -143,15 +149,18 @@ for episode in range(3):
             env.render()
             if reward == 1:
                 print("Reached Goal!!!")
+                results.append(1)
                 time.sleep(3)
             else:
                 print("Fell through hole!!!")
+                results.append(0)
                 time.sleep(3)
 
             break
 
         state = new_state
 
+print(f"RESULTS: {np.mean(results)*100}% Success Rate for {num_episodes} Episodes")
 env.close()
 
 
