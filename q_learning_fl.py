@@ -139,7 +139,7 @@ for episode in range(num_episodes):
         os.system('cls') # Clears terminal so that grid is positioned in same starting spot
         env.render()
         print("State: ", new_state, "Action: ", action, "Reward: ", reward)
-        time.sleep(0.3) # Pause to see render
+        time.sleep(0.2) # Pause to see render
 
         # Choose action with highest Q-value for current state
         action = np.argmax(q_table[state, :])
