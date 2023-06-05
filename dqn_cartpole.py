@@ -6,7 +6,6 @@ Using conda environment
 """
 
 import numpy as np
-import tensorflow as tf
 import gymnasium as gym
 
 # from tensorflow.keras.layers import Dense, Flatten
@@ -21,7 +20,6 @@ import gymnasium as gym
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_checker import check_env
 
-import keras 
 import random
 import time
 import os
@@ -109,7 +107,7 @@ for episode in range(1, episodes + 1):
 
 # --- STABLE BASELINES3 AGENT ---
 
-check_env(env, warn=True)
+# check_env(env, warn=True)
 
 print("\n---STABLE BASELINES3 AGENT---\n")
 
