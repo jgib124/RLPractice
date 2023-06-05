@@ -30,7 +30,7 @@ import os
 
 
 # --- SET UP ENVIRONMENT --- 
-env = gym.make('CartPole-v1', render_mode="human")
+env = gym.make('CartPole-v1')
 states = env.observation_space.shape[0]
 actions = env.action_space.n
 
@@ -111,11 +111,13 @@ for episode in range(1, episodes + 1):
 
 print("\n---STABLE BASELINES3 AGENT---\n")
 
+model_path = os.path.join(os.getcwd(), "ppo_cartpole")
 # model = PPO('MlpPolicy', env, verbose=1)
 # model.learn(total_timesteps=50_000)
-# model.save("ppo_cartpole")
+# model.save(model_path)
 
-model = PPO.load("ppo_cartpole", env=env)
+model_path = os.path.join(os.getcwd(), "ppo_cartpole")
+model = PPO.load(model_path, env=env)
 
 vec_env = model.get_env()
 
