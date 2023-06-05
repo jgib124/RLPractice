@@ -1,0 +1,6 @@
+gym
+gymnasium
+keras
+numpy
+stable_baselines3
+tensorflow
