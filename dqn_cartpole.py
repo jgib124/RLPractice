@@ -1,20 +1,12 @@
 """
 Practice of Deep Q-Learning with cartpole game
-Using conda environment
+Using pip virtual environment
 
-5/25/23
+6/5/23
 """
 
 import numpy as np
 import gymnasium as gym
-
-# from tensorflow.keras.layers import Dense, Flatten
-# from tensorflow.keras.models import Sequential
-# from tensorflow.keras.optimizers import Adams
-
-# from rl.agents import DQNAgent # Deep Q-Learning Agent
-# from rl.policy import BoltzmannQPolicy # Policy
-# from rl.memory import SequentialMemory # Memory
 
 # Use stablebaseline3 instead of keras-rl
 from stable_baselines3 import PPO
@@ -30,7 +22,7 @@ import os
 
 
 # --- SET UP ENVIRONMENT --- 
-env = gym.make('CartPole-v1')
+env = gym.make('CartPole-v1', render_mode='human')
 states = env.observation_space.shape[0]
 actions = env.action_space.n
 
@@ -111,12 +103,12 @@ for episode in range(1, episodes + 1):
 
 print("\n---STABLE BASELINES3 AGENT---\n")
 
-model_path = os.path.join(os.getcwd(), "ppo_cartpole")
+model_path = os.path.join(os.getcwd(), os.path.join("RLPractice", "ppo_cartpole.zip"))
+print("Model Path:", model_path)
 # model = PPO('MlpPolicy', env, verbose=1)
 # model.learn(total_timesteps=50_000)
 # model.save(model_path)
 
-model_path = os.path.join(os.getcwd(), "ppo_cartpole")
 model = PPO.load(model_path, env=env)
 
 vec_env = model.get_env()
@@ -136,6 +128,7 @@ for episode in range(1, number_episodes+1):
 
         score += reward
 
+    dqn_scores.append(score)
     print(f"Episode: {episode} Score: {score}")
 
 
