@@ -1,9 +1,13 @@
-from shower_temp_env import ShowerTempEnv
 import gymnasium as gym
 import numpy as np
 import os
+import time
+
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_checker import check_env
+
+from shower_temp_env import ShowerTempEnv
+
 
 
 env = ShowerTempEnv()
@@ -17,11 +21,16 @@ print("Starting State:", env.state)
 check_env(env, warn=True)
 
 # Train Model
-model_path = os.path.join(os.getcwd(), "ppo_showertemp.zip")
+model_path = os.path.join(os.getcwd(), "custom_env", "ppo_shower_temp.zip")
 
-model = PPO('MlpPolicy', env, verbose=1)
-model.learn(total_timesteps=100_000)
-model.save(model_path)
+print("Model Path:", model_path)
+time.sleep(3)
+
+# model = PPO('MlpPolicy', env, verbose=1)
+# model.learn(total_timesteps=200_000)
+# model.save(model_path)
+
+model = PPO.load(model_path)
 
 number_episodes = 10
 scores = []
